@@ -18,7 +18,7 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         int duration = outHour - inHour;
 
-        double rate;
+
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
