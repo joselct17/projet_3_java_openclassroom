@@ -24,18 +24,18 @@ public class FareCalculatorService {
 
         //TODO: Some tests are failing here. Need to check if this logic is correct
 
-        double fare;
+        double rate;
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
-                fare = Fare.CAR_RATE_PER_HOUR;
+                rate = Fare.CAR_RATE_PER_HOUR;
                 break;
             }
             case BIKE: {
-                fare = Fare.BIKE_RATE_PER_HOUR;
+                rate = Fare.BIKE_RATE_PER_HOUR;
                 break;
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
-        ticket.setPrice(durationMillis / ONE_HOUR_MILLIS * fare);
+        ticket.setPrice(durationMillis / ONE_HOUR_MILLIS * rate);
     }
 }
