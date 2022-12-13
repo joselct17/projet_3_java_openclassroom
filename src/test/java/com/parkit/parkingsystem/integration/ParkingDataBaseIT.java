@@ -78,13 +78,17 @@ public class ParkingDataBaseIT {
     @Test
     public void testParkingLotExit() {
 
-        Ticket ticket = ticketDAO.getTicket(TICKET_NUMBER);
-
         testParkingACar();
+        Ticket ticket = ticketDAO.getTicket(TICKET_NUMBER);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //TODO: check that the fare generated and out time are populated correctly in the database
         long outTime = ticket.getInTime().getTime() + 60 * 60 * 1000;
+        ticket.setOutTime(new Date(outTime));
+        ticket.setPrice(1.5);
         parkingService.processExitingVehicle();
+        assertNotNull(ticket);
+        assertEquals(outTime, ticket.getOutTime().getTime() );
+        assertEquals(Fare.CAR_RATE_PER_HOUR , ticket.getPrice());
 
 
     }
