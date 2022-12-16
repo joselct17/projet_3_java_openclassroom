@@ -75,6 +75,8 @@ public class ParkingDataBaseIT {
         assertNotEquals(previousSlot, newSlot);
     }
 
+
+
     @Test
     public void testParkingLotExit() {
 
@@ -83,15 +85,19 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //TODO: check that the fare generated and out time are populated correctly in the database
         long outTime = ticket.getInTime().getTime() + 60 * 60 * 1000;
-        ticket.setOutTime(new Date(outTime));
-        ticket.setPrice(1.5);
-        parkingService.processExitingVehicle();
+        parkingService.processExitingVehicle(new Date(outTime));
+        ticket = ticketDAO.getTicket(TICKET_NUMBER);
+        ticket.getOutTime().getTime();
         assertNotNull(ticket);
         assertEquals(outTime, ticket.getOutTime().getTime() );
-        assertEquals(Fare.CAR_RATE_PER_HOUR , ticket.getPrice());
+        assertEquals((Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
 
 
     }
+
+
+
+
 
 }
 
