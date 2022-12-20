@@ -107,6 +107,9 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
+            if(ticketDAO.isRecurringUser(vehicleRegNumber)) {
+                ticket.setPrice(ticket.getPrice() * Fare.RECURRING_DISCOUNT);
+            }
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
