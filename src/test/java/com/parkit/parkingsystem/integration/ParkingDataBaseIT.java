@@ -76,10 +76,6 @@ public class ParkingDataBaseIT {
         assertNotEquals(previousSlot, newSlot);
     }
 
-    @Test
-    private void testParkingLotExit() {
-        testParkingLotExit(false);
-    }
 
 
     public void testParkingLotExit(boolean discount) {
@@ -88,7 +84,6 @@ public class ParkingDataBaseIT {
         Ticket ticket = ticketDAO.getTicket(TICKET_NUMBER);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //TODO: check that the fare generated and out time are populated correctly in the database
-
         long outTime = ticket.getInTime().getTime() + 60 * 60 * 1000;
         parkingService.processExitingVehicle(new Date(outTime));
         ticket = ticketDAO.getTicket(TICKET_NUMBER);
@@ -100,10 +95,8 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testRecurringDiscount() {
-        testParkingLotExit();
+        testParkingLotExit(false);
         testParkingLotExit(true);
-
-
 
     }
 
