@@ -89,24 +89,22 @@ public class TicketDAO {
 
     public boolean isRecurringUser(String vehicleNumber ) {
         Connection con = null;
-
-        boolean response;
-
+        boolean result;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.HAS_A_TICKET);
             ps.setString(1, vehicleNumber);
             ResultSet rs = ps.executeQuery();
-            response = rs.next();
+            result = rs.next();
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
 
         }catch (Exception ex) {
             logger.error("Error checking recurring user", ex);
-            response = false;
+            result = false;
         } finally {
             dataBaseConfig.closeConnection(con);
         }
-        return response;
+        return result;
     }
 }
