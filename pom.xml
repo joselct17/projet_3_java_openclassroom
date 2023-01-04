@@ -51,8 +51,9 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.5</version>
+            <version>0.8.8</version>
             <type>maven-plugin</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
@@ -61,8 +62,10 @@
         </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs</artifactId>
-            <version>4.7.3</version>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>4.7.2.1</version>
+            <type>maven-plugin</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -86,7 +89,8 @@
                                 </manifest>
                             </archive>
                             <descriptorRefs>
-                                <descriptorRef>executable-jar-with-dependencies</descriptorRef>
+                                <!-- fix problem with assembly plugin  using a non existing descriptorRef -->
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
                         </configuration>
                     </execution>
@@ -129,7 +133,9 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <!-- Fix the IllegalClassFormatException
+                 Use the latest jacoco release -->
+                <version>0.8.8</version>
                 <executions>
                     <execution>
                         <goals>
@@ -138,39 +144,34 @@
                     </execution>
                     <execution>
                         <id>jacoco-report</id>
-                        <phase>test</phase>
+                        <!-- Fix jacoco report generation AFTER IT are run -->
+                        <phase>site</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
+            <!-- Fix the ClassNotFoundException DocumentContent
+            https://stackoverflow.com/a/51099913/1652461 -->
             <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.7.2.1</version>
-                <dependencies>
-                    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
-                    <dependency>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs</artifactId>
-                        <version>4.7.3</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
             </plugin>
         </plugins>
-
     </build>
-
     <reporting>
         <plugins>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.7.2.1</version>
+                <configuration>
+                    <xmlOutput>false</xmlOutput>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
-
 
 </project>
