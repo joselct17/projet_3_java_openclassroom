@@ -58,6 +58,7 @@ public class ParkingDataBaseIT {
 
     }
 
+    //TEST QUI VERIFIE QUE LE TICKET EST SAUVEGARDE EN BASE DE DONNEES ET QUE LA TABLE EST MISE A JOUR AVEC DISPONIBILITE
     @Test
     public void testParkingACar() {
         int previousSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
@@ -77,22 +78,29 @@ public class ParkingDataBaseIT {
     }
 
 
-
+    //FONCTION QUE VERIFIE QUE LE TARIF GENERE ET L'HEURE DE SORTI SONT BIEN DANS LA BASE DE DONNEES
     public void testParkingLotExit(boolean discount) {
 
         testParkingACar();
         Ticket ticket = ticketDAO.getTicket(TICKET_NUMBER);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //TODO: check that the fare generated and out time are populated correctly in the database
+
+        //on cree une variable heure de sortie avec une heure.
         long outTime = ticket.getInTime().getTime() + 60 * 60 * 1000;
         parkingService.processExitingVehicle(new Date(outTime));
         ticket = ticketDAO.getTicket(TICKET_NUMBER);
         assertNotNull(ticket);
+
+        // on verifie que l'heure de sortie de la voiture correspend a 1h
         assertEquals(outTime, ticket.getOutTime().getTime());
+
+        //on verifie que le tarif correspend.
         assertEquals((Fare.CAR_RATE_PER_HOUR * (discount ? Fare.RECURRING_DISCOUNT:1.0)) , ticket.getPrice());
 
     }
 
+    //On teste si le discount est appliqué
     @Test
     public void testRecurringDiscount() {
         testParkingLotExit(false);

@@ -107,6 +107,7 @@ public class ParkingService {
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
+            //creation d'une condition pour le discount de 5%
             if(ticketDAO.isRecurringUser(vehicleRegNumber)) {
                 ticket.setPrice(ticket.getPrice() * Fare.RECURRING_DISCOUNT);
             }

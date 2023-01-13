@@ -91,6 +91,7 @@ public class TicketDAO {
         return false;
     }
 
+    //Creation de la fonction isRecurringUser
     public boolean isRecurringUser(String vehicleNumber ) {
         Connection con = null;
         boolean result;
